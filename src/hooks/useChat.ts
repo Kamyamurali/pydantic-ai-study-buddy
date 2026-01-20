@@ -76,12 +76,14 @@ export const useChat = () => {
       setIsLoading(true);
 
       try {
+        // Normalize backend URL (remove trailing slash)
+        const backendUrl = config.backendUrl.replace(/\/+$/, '');
+        
         // Call the Python backend
-        const response = await fetch(`${config.backendUrl}/chat`, {
+        const response = await fetch(`${backendUrl}/chat`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'X-API-Key': config.apiKey,
           },
           body: JSON.stringify({
             message: content,
@@ -90,6 +92,7 @@ export const useChat = () => {
               role: m.role,
               content: m.content,
             })) || [],
+            api_key: config.apiKey,
           }),
         });
 
